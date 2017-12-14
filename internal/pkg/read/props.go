@@ -1,4 +1,4 @@
-package propsclean
+package read
 
 import (
 	"bufio"
@@ -23,7 +23,7 @@ func checkIsProp(a []string) {
 
 func parse(line string) (string, string) {
 	var ws = "\t "
-	s := regexp.MustCompile(" ?= ?|\\s").Split(strings.TrimLeft(line, ws), 2)
+	s := regexp.MustCompile(" ?: ?| ?= ?|\\s").Split(strings.TrimLeft(line, ws), 2)
 	checkIsProp(s)
 	k := strings.TrimLeft(s[0], ws)
 	v := strings.TrimLeft(s[1], ws)
@@ -42,7 +42,7 @@ func skip(line string) bool {
 	return false
 }
 
-func ReadProps(file string) map[string]string {
+func Props(file string) map[string]string {
 	f, err := os.Open(file)
 	defer f.Close()
 	check(err)
