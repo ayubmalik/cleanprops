@@ -1,4 +1,4 @@
-package read
+package cleanprops
 
 import (
 	"bufio"
@@ -7,12 +7,6 @@ import (
 	"regexp"
 	"strings"
 )
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
 
 func checkIsProp(a []string) {
 	if len(a) == 1 {
@@ -42,10 +36,12 @@ func skip(line string) bool {
 	return false
 }
 
-func Props(file string) map[string]string {
+func Load(file string) (map[string]string, error) {
 	f, err := os.Open(file)
 	defer f.Close()
-	check(err)
+	if err != nil {
+		return nil, err
+	}
 
 	props := make(map[string]string)
 	s := bufio.NewScanner(f)
@@ -56,5 +52,5 @@ func Props(file string) map[string]string {
 		k, v := parse(s.Text())
 		props[k] = v
 	}
-	return props
+	return props, nil
 }
