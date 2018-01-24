@@ -8,19 +8,20 @@ import (
 	"strings"
 )
 
+const whiteSpace = "\t "
+
 func checkIsProp(a []string) {
 	if len(a) == 1 {
-		fmt.Fprintf(os.Stderr, "Not valid prop: %s", a[0])
+		fmt.Fprintf(os.Stderr, "Not valid prop %q", a[0])
 		os.Exit(1)
 	}
 }
 
-func parse(line string) (string, string) {
-	var ws = "\t "
-	s := regexp.MustCompile(" ?: ?| ?= ?|\\s").Split(strings.TrimLeft(line, ws), 2)
+func parse(line string) (Key, string) {
+	s := regexp.MustCompile(":|\\s*=\\s*|\\s").Split(strings.TrimLeft(line, whiteSpace), 2)
 	checkIsProp(s)
-	k := strings.TrimLeft(s[0], ws)
-	v := strings.TrimLeft(s[1], ws)
+	k := Key(strings.Trim(s[0], whiteSpace))
+	v := strings.Trim(s[1], whiteSpace)
 	return k, v
 }
 
@@ -36,14 +37,14 @@ func skip(line string) bool {
 	return false
 }
 
-func Load(file string) (map[string]string, error) {
+func Load(file string) (map[Key]string, error) {
 	f, err := os.Open(file)
 	defer f.Close()
 	if err != nil {
 		return nil, err
 	}
 
-	props := make(map[string]string)
+	props := make(map[Key]string)
 	s := bufio.NewScanner(f)
 	for s.Scan() {
 		if skip(s.Text()) {

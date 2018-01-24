@@ -10,12 +10,20 @@ func TestLoad(t *testing.T) {
 		t.Errorf("returned nil %s", err)
 	}
 
+	value := props["some.key1"]
+	if value != "some.value1" {
+		t.Errorf("value is incorrect: %s", value)
+	}
+}
+
+func TestWhitespaceOK(t *testing.T) {
+	props, _ := Load("testdata/hello.properties")
 	if props == nil {
 		t.Errorf("returned nil")
 	}
 
-	prop1 := props["some.key1"]
-	if prop1 != "some.value1" {
-		t.Errorf("prop1 value is incorrect: %s", prop1)
+	value := props["this.is.a.long.key"]
+	if value != "value.with.leading.space" {
+		t.Errorf("value is incorrect %q", value)
 	}
 }
