@@ -4,7 +4,7 @@ class Example {
 
     private String msg2;
 
-    public Example(@Value("${cp.key1}") String key1, @Value("${cp.key2}") String key2) {
+    public Example(@Value("#{cp.key1}") String key1, @Value("#{cp.key2}") String key2) {
         this.msg1 = msg1;
         this.msg2 = msg2;
     }

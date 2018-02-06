@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Find(keys []Key, srcFile string) []Key {
+func Find(keys []Key, srcFile string, format string) []Key {
 	file, err := os.Open(srcFile)
 	if err != nil {
 		panic(err)
@@ -16,14 +16,15 @@ func Find(keys []Key, srcFile string) []Key {
 	result := make([]Key, 0)
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		findKeys(keys, scanner.Text(), &result)
+		findKeys(keys, scanner.Text(), format, &result)
 	}
 	return dedupe(result)
 }
 
-func findKeys(keys []Key, text string, result *[]Key) {
+func findKeys(keys []Key, text string, format string, result *[]Key) {
 	for _, k := range keys {
-		if strings.Contains(text, string(k)) {
+		formatted := strings.Replace(format, "key", string(k), 1)
+		if strings.Contains(text, formatted) {
 			*result = append(*result, k)
 		}
 	}
