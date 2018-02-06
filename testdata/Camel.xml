@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="b1" class="org.exampe.Class">
+        <property name="key1" value="${cp.key1}"/>
+        <property name="prop1" value="prop1"/>
+    </bean>
+
+    <camel:camelContext>
+        <camel:endpoint id="1" uri="file://${cp.key1}"/>
+        <camel:endpoint id="2" uri="file://${cp.key2}"/>
+
+        <camel:route id="r1">
+            <camel:from ref="1"/>
+            <camel:to ref="2"/>
+        </camel:route>
+        <camel:route id="r2">
+            <camel:from ref="${cp.key3}"/>
+            <camel:to ref="${cp.key4}"/>
+        </camel:route>
+
+    </camel:camelContext>
+</beans>

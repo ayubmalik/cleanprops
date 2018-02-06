@@ -5,7 +5,7 @@ import (
 )
 
 func TestLoad(t *testing.T) {
-	props, err := Load("testdata/hello.properties")
+	props, err := load("testdata/hello.properties")
 	if err != nil {
 		t.Errorf("returned nil %s", err)
 	}
@@ -14,10 +14,14 @@ func TestLoad(t *testing.T) {
 	if value != "some.value1" {
 		t.Errorf("value is incorrect: %s", value)
 	}
+
+	if len(props) != 5 {
+		t.Errorf("expected 5 props in hello.props")
+	}
 }
 
-func TestWhitespaceOK(t *testing.T) {
-	props, _ := Load("testdata/hello.properties")
+func TestTrimWhitespace(t *testing.T) {
+	props, _ := load("testdata/hello.properties")
 	if props == nil {
 		t.Errorf("returned nil")
 	}
