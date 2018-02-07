@@ -16,9 +16,9 @@ func Find(keys []Key, srcFile string, format string) []Key {
 	result := make([]Key, 0)
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		findKeys(keys, scanner.Text(), format, &result)
+		findKeys(diff(keys, result), scanner.Text(), format, &result)
 	}
-	return dedupe(result)
+	return result
 }
 
 func findKeys(keys []Key, text string, format string, result *[]Key) {
@@ -30,6 +30,21 @@ func findKeys(keys []Key, text string, format string, result *[]Key) {
 	}
 }
 
+func diff(a, b []Key) []Key {
+	mb := map[Key]bool{}
+	for _, x := range b {
+		mb[x] = true
+	}
+	ab := []Key{}
+	for _, x := range a {
+		if _, ok := mb[x]; !ok {
+			ab = append(ab, x)
+		}
+	}
+	return ab
+}
+
+// TODO: move
 func dedupe(elements []Key) []Key {
 	found := map[Key]bool{}
 
