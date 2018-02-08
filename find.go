@@ -4,8 +4,26 @@ import (
 	"bufio"
 	"os"
 	"strings"
+	"fmt"
+	"path/filepath"
 )
 
+func FindInFiles(keys []Key, srcDir string, ext ... string) []Key {
+	files := listFiles(srcDir, ext...)
+	for _, f := range files {
+		if notPropsFile(f) {
+			result := Find(keys, f, "${key}")
+			fmt.Println(f, result)
+		}
+	}
+	return nil
+}
+
+func notPropsFile(file string) bool {
+	return strings.ToLower(filepath.Ext(file)) != ".properties"
+}
+
+// TODO: take var fomats e.g. ${key}, #{key}
 func Find(keys []Key, srcFile string, format string) []Key {
 	file, err := os.Open(srcFile)
 	if err != nil {
@@ -42,21 +60,4 @@ func diff(a, b []Key) []Key {
 		}
 	}
 	return ab
-}
-
-// TODO: move
-func dedupe(elements []Key) []Key {
-	found := map[Key]bool{}
-
-	// Create a map of all unique elements.
-	for v := range elements {
-		found[elements[v]] = true
-	}
-
-	// Place all keys from the map into a slice.
-	result := []Key{}
-	for key, _ := range found {
-		result = append(result, key)
-	}
-	return result
 }
