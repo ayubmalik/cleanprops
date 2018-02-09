@@ -2,11 +2,12 @@ package props
 
 import (
 	"bufio"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
-	"fmt"
 )
 
 func FindInFiles(keys []Key, srcDir string, ext ...string) []Key {
@@ -15,7 +16,7 @@ func FindInFiles(keys []Key, srcDir string, ext ...string) []Key {
 	for _, f := range files {
 		if notPropsFile(f) {
 			fmt.Println(f)
-			r := Find(keys, f, "\\${key}")
+			r := Find2(keys, f, "\\${key}")
 			result = append(result, r...)
 		}
 	}
@@ -38,6 +39,17 @@ func Find(keys []Key, srcFile string, format string) []Key {
 	for scanner.Scan() {
 		findKeys(diff(keys, result), scanner.Text(), format, &result)
 	}
+	return result
+}
+
+func Find2(keys []Key, srcFile string, format string) []Key {
+	bytes, err := ioutil.ReadFile(srcFile)
+	if err != nil {
+		panic(err)
+	}
+	contents := string(bytes)
+	result := make([]Key, 0)
+	findKeys(diff(keys, result), contents, format, &result)
 	return result
 }
 

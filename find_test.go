@@ -29,6 +29,20 @@ func TestFindInFiles(t *testing.T) {
 	expectKeys(result, t, 5)
 }
 
+func BenchmarkFind1(b *testing.B) {
+	props := Load("testdata/find.properties")
+	for n := 0; n < b.N; n++ {
+		Find(props.SortedKeys(), "testdata/DollarPropsOnly.xml", "\\${key}|#{key}")
+	}
+}
+
+func BenchmarkFind2(b *testing.B) {
+	props := Load("testdata/find.properties")
+	for n := 0; n < b.N; n++ {
+		Find2(props.SortedKeys(), "testdata/DollarPropsOnly.xml", "\\${key}|#{key}")
+	}
+}
+
 func expectKeys(result []Key, t *testing.T, count int) {
 	if len(result) != count {
 		t.Errorf("expected to find %d keys but was %d", count, len(result))
