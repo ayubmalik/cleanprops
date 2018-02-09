@@ -1,26 +1,28 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"github.com/ayubmalik/cleanprops"
+	"github.com/ayubmalik/props"
 	"os"
-	"path/filepath"
+)
+
+var (
+	propsFile = flag.String("props", "", ".properties file to read keys from (required)")
+	srcDir    = flag.String("srcdir", ".", "source directory containing your code")
+	ext       = flag.String("ext", "", "file extensions to include e.g. -ext .java, defaults to all files")
 )
 
 func main() {
-	pwd()
-	fmt.Println("cleaning props")
-	props := cleanprops.LoadProps("testdatahello.properties")
-	for k, v := range props.SortedKeys() {
-		fmt.Printf("k:'%s', v:'%s'\n", k, v)
+	flag.Parse()
+	if *propsFile == "" {
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
-}
 
-func pwd() {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	exPath := filepath.Dir(ex)
-	fmt.Println(exPath)
+	fmt.Println("src ", *srcDir)
+	p := props.Load(*propsFile)
+	matches := props.FindInFiles(p.SortedKeys(), *srcDir, *ext)
+	fmt.Println(len(matches))
+
 }

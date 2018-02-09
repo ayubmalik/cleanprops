@@ -6,7 +6,7 @@ import (
 )
 
 func TestLoadProps(t *testing.T) {
-	props := LoadProps("testdata/hello.properties")
+	props := Load("testdata/hello.properties")
 	if !strings.HasSuffix(props.FileName, "testdata/hello.properties") {
 		t.Errorf("filename is incorrect %q", props.FileName)
 	}

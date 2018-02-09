@@ -27,7 +27,7 @@ func (p Props) SortedKeys() []Key {
 	return keys
 }
 
-func LoadProps(file string) Props {
+func Load(file string) Props {
 	abs, err := filepath.Abs(file)
 	if err != nil {
 		panic(err)

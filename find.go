@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"fmt"
 )
 
 func FindInFiles(keys []Key, srcDir string, ext ...string) []Key {
@@ -13,6 +14,7 @@ func FindInFiles(keys []Key, srcDir string, ext ...string) []Key {
 	result := make([]Key, 0)
 	for _, f := range files {
 		if notPropsFile(f) {
+			fmt.Println(f)
 			r := Find(keys, f, "\\${key}")
 			result = append(result, r...)
 		}
@@ -24,7 +26,6 @@ func notPropsFile(file string) bool {
 	return strings.ToLower(filepath.Ext(file)) != ".properties"
 }
 
-// TODO: take var fomats e.g. ${key}, #{key}
 func Find(keys []Key, srcFile string, format string) []Key {
 	file, err := os.Open(srcFile)
 	if err != nil {

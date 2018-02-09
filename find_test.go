@@ -6,25 +6,25 @@ import (
 )
 
 func TestFindHashFormat(t *testing.T) {
-	props := LoadProps("testdata/find.properties")
+	props := Load("testdata/find.properties")
 	result := Find(props.SortedKeys(), "testdata/HashPropsOnly.java", "#{key}")
 	expectKeys(result, t, 2)
 }
 
 func TestFindDollarFormat(t *testing.T) {
-	props := LoadProps("testdata/find.properties")
+	props := Load("testdata/find.properties")
 	result := Find(props.SortedKeys(), "testdata/DollarPropsOnly.xml", "\\${key}")
 	expectKeys(result, t, 4)
 }
 
 func TestFindMixedFormat(t *testing.T) {
-	props := LoadProps("testdata/find.properties")
+	props := Load("testdata/find.properties")
 	result := Find(props.SortedKeys(), "testdata/MixedProps.java", "\\${key}|#{key}")
 	expectKeys(result, t, 2)
 }
 
 func TestFindInFiles(t *testing.T) {
-	props := LoadProps("testdata/find.properties")
+	props := Load("testdata/find.properties")
 	result := FindInFiles(props.SortedKeys(), "testdata/")
 	expectKeys(result, t, 5)
 }
