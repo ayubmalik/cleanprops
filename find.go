@@ -3,20 +3,21 @@ package cleanprops
 import (
 	"bufio"
 	"os"
-	"strings"
-	"fmt"
 	"path/filepath"
+	"regexp"
+	"strings"
 )
 
-func FindInFiles(keys []Key, srcDir string, ext ... string) []Key {
+func FindInFiles(keys []Key, srcDir string, ext ...string) []Key {
 	files := listFiles(srcDir, ext...)
+	result := make([]Key, 0)
 	for _, f := range files {
 		if notPropsFile(f) {
-			result := Find(keys, f, "${key}")
-			fmt.Println(f, result)
+			r := Find(keys, f, "\\${key}")
+			result = append(result, r...)
 		}
 	}
-	return nil
+	return result
 }
 
 func notPropsFile(file string) bool {
@@ -41,8 +42,9 @@ func Find(keys []Key, srcFile string, format string) []Key {
 
 func findKeys(keys []Key, text string, format string, result *[]Key) {
 	for _, k := range keys {
-		formatted := strings.Replace(format, "key", string(k), 1)
-		if strings.Contains(text, formatted) {
+		search := strings.Replace(format, "key", string(k), -1)
+		re := regexp.MustCompile(search)
+		if re.MatchString(text) {
 			*result = append(*result, k)
 		}
 	}
