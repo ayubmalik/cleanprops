@@ -2,7 +2,6 @@ package props
 
 import (
 	"bufio"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -10,12 +9,11 @@ import (
 	"strings"
 )
 
-func FindInFiles(keys []Key, srcDir string, ext ...string) []Key {
-	files := listFiles(srcDir, ext...)
+func FindInFiles(keys []Key, srcDir string, ext []string) []Key {
+	files := listFiles(srcDir, ext)
 	result := make([]Key, 0)
 	for _, f := range files {
 		if notPropsFile(f) {
-			fmt.Println(f)
 			r := Find2(keys, f, "\\${key}")
 			result = append(result, r...)
 		}
@@ -37,7 +35,7 @@ func Find(keys []Key, srcFile string, format string) []Key {
 	result := make([]Key, 0)
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		findKeys(diff(keys, result), scanner.Text(), format, &result)
+		findKeys(Diff(keys, result), scanner.Text(), format, &result)
 	}
 	return result
 }
@@ -49,7 +47,7 @@ func Find2(keys []Key, srcFile string, format string) []Key {
 	}
 	contents := string(bytes)
 	result := make([]Key, 0)
-	findKeys(diff(keys, result), contents, format, &result)
+	findKeys(Diff(keys, result), contents, format, &result)
 	return result
 }
 
@@ -63,7 +61,7 @@ func findKeys(keys []Key, text string, format string, result *[]Key) {
 	}
 }
 
-func diff(a, b []Key) []Key {
+func Diff(a, b []Key) []Key {
 	mb := map[Key]bool{}
 	for _, x := range b {
 		mb[x] = true

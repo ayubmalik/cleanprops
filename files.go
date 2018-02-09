@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func listFiles(dir string, ext ...string) []string {
+func listFiles(dir string, ext [] string) []string {
 	files := make([]string, 0)
 	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() && matches(info.Name(), ext) {
