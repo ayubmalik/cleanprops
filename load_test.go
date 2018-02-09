@@ -1,4 +1,4 @@
-package cleanprops
+package props
 
 import (
 	"testing"
@@ -20,7 +20,7 @@ func TestLoad(t *testing.T) {
 	}
 }
 
-func TestTrimWhitespace(t *testing.T) {
+func TestLoadTrimsWhitespace(t *testing.T) {
 	props, _ := load("testdata/hello.properties")
 	if props == nil {
 		t.Errorf("returned nil")

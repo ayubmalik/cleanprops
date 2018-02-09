@@ -1,4 +1,4 @@
-package cleanprops
+package props
 
 import (
 	"os"

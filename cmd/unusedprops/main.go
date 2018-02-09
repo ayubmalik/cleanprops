@@ -10,7 +10,7 @@ import (
 func main() {
 	pwd()
 	fmt.Println("cleaning props")
-	props := cleanprops.LoadProps("testdata/hello.properties")
+	props := cleanprops.LoadProps("testdatahello.properties")
 	for k, v := range props.SortedKeys() {
 		fmt.Printf("k:'%s', v:'%s'\n", k, v)
 	}
