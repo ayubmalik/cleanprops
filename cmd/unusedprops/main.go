@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ayubmalik/cleanprops/internal/pkg/read"
+	"github.com/ayubmalik/cleanprops"
 	"os"
 	"path/filepath"
 )
@@ -10,8 +10,8 @@ import (
 func main() {
 	pwd()
 	fmt.Println("cleaning props")
-	props := read.Props("/tmp/hello.properties")
-	for k, v := range props {
+	props := cleanprops.LoadProps("testdata/hello.properties")
+	for k, v := range props.SortedKeys() {
 		fmt.Printf("k:'%s', v:'%s'\n", k, v)
 	}
 }
