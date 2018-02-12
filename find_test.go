@@ -25,7 +25,7 @@ func TestFindMixedFormat(t *testing.T) {
 
 func TestFindInFiles(t *testing.T) {
 	props := Load("testdata/find.properties")
-	result := FindInFiles(props.SortedKeys(), "testdata/")
+	result := FindInFiles(props.SortedKeys(), "testdata/", []string{})
 	expectKeys(result, t, 5)
 }
 
